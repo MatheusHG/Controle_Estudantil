@@ -17,8 +17,24 @@ class Turma():
             s += ('-'*10)
         return s
 
-    def encerrarPeriodo(self):
-        self.estado = False
+    def verificaFinal(self, quantidade_notas):
+        for a in self.alunos:
+            if a.notas[0].peso != False:
+                tipo_media = 1
+        s = ''
+        situacao = ''
+        for a in self.alunos:
+            media = a.getMedia(quantidade_notas, tipo_media)
+            if media == False:
+                return False
+            elif media >= 7:
+                situacao = 'Aprovado'
+            elif media >= 4:
+                situacao = 'Final'
+            else:
+                situacao = 'Reprovado'
+            s += f'{a.nome} -- {situacao} -- Média: {media:.1f}\n'
+        print(s)
 
     def getSituacaoAlunos(self):
         for a in self.alunos:

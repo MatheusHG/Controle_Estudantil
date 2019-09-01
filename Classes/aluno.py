@@ -17,6 +17,7 @@ class Aluno():
         self.aprovado = None
         self.notas = []
         self.faltas = 0
+        self.qtd_notas = 0
 
     def __str__(self): 
         s = ('Aluno: {}\n'.format(self.nome) 
@@ -27,16 +28,18 @@ class Aluno():
     def adicionarNota(self, n, peso):
         nota = Nota([n, peso])
         self.notas.append(nota)
-        
-    def getMedia(self):
+        self.qtd_notas += 1
+
+    ## Tipo media == 1 quando calculo com peso e 0 quando não.
+    def getMedia(self, quantidade_notas, tipo_media):
+        if quantidade_notas != self.qtd_notas:
+            return False
         soma_das_notas = 0
-        tipo_media = 0 
         soma_pesos = 0
         quantidade_sem_peso = 0 
         for n in self.notas:
             if (n.peso != False):
                 soma_pesos += n.peso
-                tipo_media = 1
             else:
                 quantidade_sem_peso += 1
         if (tipo_media == 1):
@@ -51,7 +54,7 @@ class Aluno():
             for n in self.notas:
                 soma_das_notas += n.getNota()
             self.media = soma_das_notas/len(self.notas)
-        return f'{self.media:.1f}'
+        return self.media
 
     def getNotas(self):
         l = []
