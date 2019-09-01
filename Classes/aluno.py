@@ -52,6 +52,12 @@ class Aluno():
             self.media = soma_das_notas/len(self.notas)
         return f'{self.media:.1f}'
 
+    def getNotas(self):
+        l = []
+        for n in self.notas:
+            l.append(n.getNota())
+        return l
+
     def adicionarFalta(self):
         self.faltas += 1
 
