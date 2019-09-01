@@ -14,6 +14,7 @@ class Aluno():
         self.numero_rg = numero_rg
         self.matricula = f"20191{self.numero_cpf:.03s}"
         self.estado_do_aluno = True
+        self.aprovado = None
         self.notas = []
         self.faltas = 0
 

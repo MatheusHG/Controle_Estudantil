@@ -27,3 +27,18 @@ class Turma():
                 notas += f'{n:.1f}| '
             print('-'*10)
             print(f'{a.nome}\nNotas: {notas}\nFaltas: {a.faltas}')
+
+    def getReprovados(self):
+        l = []
+        for a in self.alunos:
+            if a.aprovado == False:
+                l.append(a)
+        return l
+
+    def getAprovados(self):
+        l = []
+        for a in self.alunos:
+            if a.aprovado == True:
+                l.append(a)
+        return l
+    
