@@ -2,7 +2,7 @@
 #Sexta - Feira, 30 de Agosto de 2019
 #Classe Aluno
 
-from nota import Nota
+from Classes.nota import Nota
 
 class Aluno():
 
@@ -65,8 +65,14 @@ class Aluno():
     def adicionarFalta(self):
         self.faltas += 1
 
+    def notafinal(self, n):
+        self.final = n
+
     def abonarFalta(self):
         self.faltas -= 1
 
     def getFaltas(self):
         return self.faltas
+
+    def setmedia(self, nota):
+        self.media = nota

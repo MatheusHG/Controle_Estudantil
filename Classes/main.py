@@ -2,29 +2,48 @@
 #Sexta - Feira, 30 de Agosto de 2019
 #Classe Principal
 
-from aluno import Aluno
-from turma import Turma
+from Classes.aluno import Aluno
+from Classes.turma import Turma
+alunos = []
 
-data_nascimento = '01/08/2019'
-numero_cpf = '321001990-05'
-numero_rg = '543213'
-aluno_um = Aluno('Cleber', data_nascimento, numero_cpf, numero_rg)
-aluno_dois = Aluno('Claudia', data_nascimento, numero_cpf, numero_rg)
-aluno_tres = Aluno('Fernandis', data_nascimento, numero_cpf, numero_rg)
-aluno_quatro = Aluno('Marieles', data_nascimento, numero_cpf, numero_rg)
-aluno_cinco = Aluno('Lucio', data_nascimento, numero_cpf, numero_rg)
-aluno_um.adicionarNota(10, False)
-aluno_um.adicionarNota(10, False)
-aluno_dois.adicionarNota(9, False)
-aluno_dois.adicionarNota(7, 30)
-aluno_tres.adicionarNota(7, 20)
-aluno_tres.adicionarNota(7, False)
-aluno_quatro.adicionarNota(4, False)
-aluno_quatro.adicionarNota(4, False)
-aluno_cinco.adicionarNota(1, 50)
-aluno_cinco.adicionarNota(1, 50)
-turma = Turma([aluno_um, aluno_dois,aluno_tres,aluno_quatro,aluno_cinco], 10)
+def matricularaluno():
+    nome = str(input('Nome do Aluno: '))
+    rg = str(input('RG: '))
+    cpf = str(input('CPF: '))
+    data_nascimento = str(input('Data de Nascimento: '))
+    aluno = Aluno(nome, data_nascimento, cpf, rg)
+    alunos.append(aluno)
 
-print(turma.estado)
-turma.verificaFinal(2)
-print(turma.estado)
+def menu():
+    while True:
+        print('1 - Matricular Aluno')
+        print('2 - Criar Turma')
+        print('3 - Adicionar Notas')
+        print('4 - Adicionar Falta')
+        print('5 - Verificar Situação dos alunos')
+        print('6 - Verificar Aprovados/Reprovados e Finalistas')
+        print('7 - Encerrar Turma')
+        opcao = int(input())
+
+        if opcao == 1:
+            matricularaluno()
+        elif opcao == 2:
+            faltas = int(input('Qual limite de faltas da turma? '))
+            turma = Turma(alunos, faltas)
+            print('Turma criada!')
+        elif opcao == 3:
+            turma.adicionarNotas()
+        elif opcao == 4:
+            nome = str(input('Qual nome do aluno? '))
+            for a in alunos:
+                if a.nome == nome:
+                    a.adicionarFalta()
+        elif opcao == 5:
+            turma.getSituacaoAlunos()
+        elif opcao == 6:
+            notas = int(input('Quantas notas foram dadas aos alunos? '))
+            turma.verificaFinal(notas)
+        elif opcao == 7:
+            turma.encerrarturma()
+
+menu()
