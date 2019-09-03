@@ -4,19 +4,13 @@
 
 class Nota():
 
-    def __init__(self, args):
-        self.nota = args[0]
-        if args[1] == False:
-            self.peso = False
-        else:    
-            self.peso = args[1]/100
+    def __init__(self, nota, peso):
+        self.nota = nota
+        self.peso = peso
 
     def __str__(self):
         return self.nota
 
-    def getNota(self):
-        if self.peso != False:
-            peso_nota = self.nota * self.peso        
-            return peso_nota
-        else:
-            return self.nota
+    def recebeidentidade(self, n):
+        self.nota = n[3]
+        self.peso = n[4]

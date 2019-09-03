@@ -1,33 +1,32 @@
 #Arthur Stevam
 #Sábado, 31 de Agosto de 2019
 #Classe Turma
-from Classes.nota import Nota
 
+import random
 
 class Turma():
 
-    def __init__(self, lista_alunos, faltas):
-        self.alunos = lista_alunos
+    def __init__(self, faltas):
+        codigo = random.randint(10, 99)
         self.limiteFaltas = faltas
         self.estado = True
-        self.codigo_turma = f'2019008{len(self.alunos)}{faltas}'
-        self.final = []
+        self.codigo_turma = f'2019{codigo}{faltas:02}'
+        self.notas = 0
 
-    def getAlunos(self):
-        s = ""
-        for a in self.alunos:
-            s += f'\n{a}\n'
-            s += ('-'*10)
-        return s
+    def turmaidentidade(self, t):
+        self.codigo_turma = t[0]
+        self.estado = t[1]
+        self.limiteFaltas = t[2]
+        self.notas = t[3]
 
-    def verificaFinal(self, quantidade_notas):
+    ''' def verificaFinal(self):
         for a in self.alunos:
             if a.notas[0].peso is not False:
                 tipo_media = 1
         s = ''
         situacao = ''
         for a in self.alunos:
-            media = a.getMedia(quantidade_notas, tipo_media)
+            media = a.getMedia(self.quantidade_notas, tipo_media)
             if media is False:
                 self.notaAluno(a.matricula)
             elif media >= 7:
@@ -50,7 +49,7 @@ class Turma():
                     else:
                         return 'Reprovado'
                 else:
-                    return 'Aluno não está na turma.'
+                    return 'Aluno não está na turma.' 
 
     def getSituacaoAlunos(self):
         for a in self.alunos:
@@ -75,13 +74,14 @@ class Turma():
         return l
 
     def adicionarNotas(self):
-            for a in self.alunos:
-                n = float(input(f'{a.nome}\nNota: '))
-                peso = int(input('Peso da Nota\n(Se não houver peso digite 0): '))
-                if peso == 0:
-                    peso = False
-                a.adicionarNota(n, peso)
-                print('Nota Adicionada!')
+        self.notas_digitadas += 1
+        for a in self.alunos:
+            n = float(input(f'{a.nome}\nNota: '))
+            peso = int(input('Peso da Nota\n(Se não houver peso digite 0): '))
+            if peso == 0:
+                peso = False
+            a.adicionarNota(n, peso)
+            print('Nota Adicionada!')
 
     def adicionarnotasfinal(self):
         opcao = 1
@@ -112,7 +112,7 @@ class Turma():
             else:
                 a.aprovado == False
             a.media = media_atual
-            self.getsituacaoaluno(a)
+            self.getsituacaoaluno(a) '''
 
 
 

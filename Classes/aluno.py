@@ -6,32 +6,15 @@ from Classes.nota import Nota
 
 class Aluno():
 
-    def __init__(self, nome, data_nascimento,
-                numero_cpf, numero_rg):
+    def __init__(self, nome, cpf):
         self.nome = nome
-        self.data_nascimento = str(data_nascimento)
-        self.numero_cpf = numero_cpf
-        self.numero_rg = numero_rg
-        self.matricula = f"20191{self.numero_cpf:.03s}"
-        self.estado_do_aluno = True
-        self.aprovado = None
-        self.notas = []
-        self.faltas = 0
-        self.qtd_notas = 0
-
-    def __str__(self): 
-        s = ('Aluno: {}\n'.format(self.nome) 
-             + 'Data de Nascimento: {}\n'.format(self.data_nascimento)
-             + 'Matrícula: {}'.format(self.matricula))
-        return s
-   
-    def adicionarNota(self, n, peso):
-        nota = Nota([n, peso])
-        self.notas.append(nota)
-        self.qtd_notas += 1
+        self.cpf = cpf
+        self.matricula = f"20191{self.cpf:.03s}"
+        self.aprovado = False
+        #self.qtd_notas = 0
 
     ## Tipo media == 1 quando calculo com peso e 0 quando não.
-    def getMedia(self, quantidade_notas, tipo_media):
+    '''def getMedia(self, quantidade_notas, tipo_media):
         if quantidade_notas != self.qtd_notas:
             return False
         soma_das_notas = 0
@@ -60,19 +43,13 @@ class Aluno():
         l = []
         for n in self.notas:
             l.append(n.getNota())
-        return l
+        return l '''
 
-    def adicionarFalta(self):
-        self.faltas += 1
+    def recebeentidade(self, a):
+        self.matricula = a[0]
+        self.nome = a[1]
+        self.cpf = a[2]
+        self.aprovado = a[3]
 
     def notafinal(self, n):
         self.final = n
-
-    def abonarFalta(self):
-        self.faltas -= 1
-
-    def getFaltas(self):
-        return self.faltas
-
-    def setmedia(self, nota):
-        self.media = nota
