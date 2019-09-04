@@ -195,5 +195,6 @@ def menu():
             verificaralunos(turma)
         else:
             bd.desconecta()
+            break
 
 menu()
