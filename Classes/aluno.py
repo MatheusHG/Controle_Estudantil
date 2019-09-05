@@ -3,53 +3,73 @@
 #Classe Aluno
 
 from Classes.nota import Nota
+from bd.acesso_bd import banco_de_dados
 
 class Aluno():
+    __nome = ""
+    __cpf = ""
+    __matricula = ""
+    __media = 0
+    __notas = []
 
     def __init__(self, nome, cpf):
-        self.nome = nome
-        self.cpf = cpf
-        self.matricula = f"20191{self.cpf:.03s}"
-        self.aprovado = False
-        #self.qtd_notas = 0
-
-    ## Tipo media == 1 quando calculo com peso e 0 quando não.
-    '''def getMedia(self, quantidade_notas, tipo_media):
-        if quantidade_notas != self.qtd_notas:
-            return False
-        soma_das_notas = 0
-        soma_pesos = 0
-        quantidade_sem_peso = 0 
-        for n in self.notas:
-            if (n.peso != False):
-                soma_pesos += n.peso
-            else:
-                quantidade_sem_peso += 1
-        if (tipo_media == 1):
-            if quantidade_sem_peso != 0:
-                peso_restou = (1.0 - soma_pesos) / quantidade_sem_peso
-            for n in self.notas:
-                if(n.peso == False):
-                    n.peso = peso_restou
-                soma_das_notas += n.getNota()
-            self.media = soma_das_notas
-        else:
-            for n in self.notas:
-                soma_das_notas += n.getNota()
-            self.media = soma_das_notas/len(self.notas)
-        return self.media
-
-    def getNotas(self):
-        l = []
-        for n in self.notas:
-            l.append(n.getNota())
-        return l '''
+        self.__nome = nome
+        self.__cpf = cpf
+        self.__matricula = f"20191{self.__cpf:.03s}"
+        self.__notas = []
+        self.__media = 0
 
     def recebeentidade(self, a):
-        self.matricula = a[0]
-        self.nome = a[1]
-        self.cpf = a[2]
-        self.aprovado = a[3]
+        self.__matricula = a[0]
+        self.__nome = a[1]
+        self.__cpf = a[2]
+        self.__media = a[3]
 
-    def notafinal(self, n):
-        self.final = n
+    def salvar(self):
+        bd = banco_de_dados()
+        try:
+            bd.insertaluno(self.__matricula, self.__nome, self.__cpf, self.__media)
+            print('Aluno matriculado com sucesso!')
+        except:
+            print('Não foi possível salvar o aluno. Tente novamente mais tarde!')
+
+    def getmedia(self):
+        soma = 0
+        tipo = 0
+        quantidade = 0
+        self.__getnotas()
+        for nota in self.__notas:
+            if nota.get_peso() == 0 or tipo == 1:
+                quantidade += 1
+                soma += nota.get_nota()
+                tipo = 1
+            else:
+                soma += (nota.get_nota() * nota.get_peso())/100
+        if tipo == 1:
+            self.__media = soma/quantidade
+        else:
+            self.__media = soma
+        return self.__media
+
+    def get_nome(self):
+        return self.__nome
+
+    def get_cpf(self):
+        return self.__cpf
+
+    def __getnotas(self):
+        self.__notas.clear()
+        bd = banco_de_dados()
+        result = bd.getnotasaluno(self.__matricula)
+        nota = Nota(0, 0, 0)
+        try:
+            for n in result:
+                nota.recebeentidade(n)
+                self.__notas.append(nota)
+        except:
+            print('Erro ao tentar recuperar notas!')
+
+    def get_matricula(self):
+        return self.__matricula
+
+

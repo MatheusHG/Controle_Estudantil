@@ -14,14 +14,13 @@ class banco_de_dados():
                 matricula VARCHAR(8) NOT NULL PRIMARY KEY UNIQUE,
                 nome VARCHAR NOT NULL,
                 cpf VARCHAR(14) NOT NULL UNIQUE,
-                aprovado INTEGER NOT NULL
+                media REAL 
             );""")
 
         #criando tabela turma
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS turma (
                 codigo VARCHAR(9) NOT NULL UNIQUE PRIMARY KEY,
-                estado INTEGER NOT NULL,
                 faltas INTEGER, 
                 quantidade_notas INTEGER
             );""")
@@ -31,16 +30,6 @@ class banco_de_dados():
             CREATE TABLE IF NOT EXISTS matriculado (
                 matricula_aluno VARCHAR(8) NOT NULL UNIQUE,
                 codigo_turma VARCHAR(9) NOT NULL,
-                FOREIGN KEY (matricula_aluno) REFERENCES aluno(matricula),
-                FOREIGN KEY (codigo_turma) REFERENCES turma(codigo)
-                PRIMARY KEY (matricula_aluno, codigo_turma)
-            );""")
-
-        #criando tabela de alunos na final
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS finalista (
-                matricula_aluno VARCHAR(8) NOT NULL UNIQUE,
-                codigo_turma VARCHAR(9) NOT NULL UNIQUE,
                 FOREIGN KEY (matricula_aluno) REFERENCES aluno(matricula),
                 FOREIGN KEY (codigo_turma) REFERENCES turma(codigo)
                 PRIMARY KEY (matricula_aluno, codigo_turma)
@@ -59,26 +48,18 @@ class banco_de_dados():
                 PRIMARY KEY (id, matricula_aluno)
             );""")
 
-
-    def insertfinalista(self, matricula_aluno, codigo_turma):
-        self.cursor.execute("""
-            INSERT INTO finalista (matricula_aluno, codigo_turma)
-            VALUES (?, ?)
-        """, (matricula_aluno, codigo_turma))
-        self.conn.commit()
-
-    def isertnota(self, id, matricula_aluno, codigo_turma, nota, peso):
+    def insertnota(self, id, matricula_aluno, codigo_turma, nota, peso):
         self.cursor.execute("""
             INSERT INTO nota (id, matricula_aluno, codigo_turma, nota, peso)
             VALUES (?, ?, ?, ?, ?)
         """, (id, matricula_aluno, codigo_turma, nota, peso))
         self.conn.commit()
 
-    def insertaluno(self, matricula, nome, cpf, aprovado):
+    def insertaluno(self, matricula, nome, cpf, media):
         self.cursor.execute("""
-            INSERT INTO alunos (matricula, nome, cpf, aprovado)
+            INSERT INTO alunos (matricula, nome, cpf, media)
             VALUES (?, ?, ?, ?)
-        """, (matricula, nome, cpf, aprovado))
+        """, (matricula, nome, cpf, media))
         self.conn.commit()
 
     def getaluno(self, matricula):
@@ -111,22 +92,17 @@ class banco_de_dados():
         """, (codigo,))
         return result.fetchone()
 
-    def getnotas(self, codigo_turma, matricula_aluno):
+    def getnotasaluno(self, matricula_aluno):
         result = self.cursor.execute("""
-            SELECT * FROM nota WHERE codigo_turma = ? AND matricula_aluno = ?
-        """, (codigo_turma, matricula_aluno))
+            SELECT * FROM nota WHERE matricula_aluno = ?
+        """, (matricula_aluno,))
         return result.fetchall()
 
-    def getfinalistas(self, codigo_turma):
-        result = self.cursor.execute("""
-            SELECT * FROM finalista WHERE codigo_turma = ?
-        """, (codigo_turma))
-
-    def insertturma(self, codigo, faltas, estado, notas):
+    def insertturma(self, codigo, faltas,  notas):
         self.cursor.execute("""
-            INSERT INTO turma (codigo, estado, faltas, quantidade_notas)
-            VALUES (?, ?, ?, ?)
-        """, (codigo, estado, faltas, notas))
+            INSERT INTO turma (codigo, faltas, quantidade_notas)
+            VALUES (?, ?, ?)
+        """, (codigo, faltas, notas))
         self.conn.commit()
 
     def insertmatricula(self, matricula_aluno, codigo_turma):
@@ -136,34 +112,12 @@ class banco_de_dados():
         """, (matricula_aluno, codigo_turma))
         self.conn.commit()
 
-    def updatenota(self, nova_nota, matricula_aluno, codigo_turma):
-        self.cursor.execute("""
-            UPDATE nota
-            SET nota = ?
-            WHERE matricula_aluno = ? AND codigo_turma = ?
-        """, (nova_nota, matricula_aluno, codigo_turma))
-        self.conn.commit()
-
     def updatequantidadenotas(self, codigo, quantidade):
         self.cursor.execute("""
                 UPDATE turma
                 SET quantidade_notas = ?
                 WHERE codigo = ? 
         """, (quantidade, codigo))
-        self.conn.commit()
-
-    def updatepeso(self, novo_peso, codigo_turma):
-        self.cursor.execute("""
-            UPDATE nota
-            SET peso = ?
-            WHERE codigo_turma = ?
-        """, (novo_peso,  codigo_turma))
-        self.conn.commit()
-
-    def deletenota(self, id, codigo_turma):
-        self.cursor.execute("""
-            DELETE FROM nota WHERE id = ? AND codigo_turma = ?
-        """, (id, codigo_turma))
         self.conn.commit()
 
     def deleteturma(self, codigo):
